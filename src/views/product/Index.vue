@@ -31,7 +31,7 @@
                                     <td>{{ product.price }}</td>
                                     <td class="text-center">
                                         <router-link :to="{name: 'product.edit', params:{id: product.id }}" class="btn btn-sm btn-primary mr-1">EDIT</router-link>
-                                        <button class="btn btn-sm btn-danger ml-1">DELETE</button>
+                                        <button @click.prevent="productDelete(product.id)" class="btn btn-sm btn-danger ml-1">DELETE</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -71,9 +71,26 @@ export default {
 
         })
 
+        //method delete
+        function productDelete(id) {
+                    
+        //delete data product by ID
+        axios.delete(`http://localhost:8000/api/product/${id}`)
+        .then(() => {
+                    
+            //splice products 
+            products.value.splice(products.value.indexOf(id), 1);
+
+            }).catch(error => {
+                console.log(error.response.data)
+            })
+
+        }
+
         //return
         return {
-            products
+            products,
+            productDelete
         }
 
     }
